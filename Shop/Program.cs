@@ -3,6 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    string connectionString = "Server=localhost;Database=MVC_SHOP;Trusted_Connection=True;TrustServerCertificate=True;";
+    options.UseSqlServer(connectionString);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline. 
@@ -26,6 +32,11 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
-readonly екуе
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    DbInitializer.Seed(context);
+}
 
 app.Run();
