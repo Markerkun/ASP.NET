@@ -12,67 +12,80 @@ namespace Shop.Helpers
     {
         public static void SeedCategories(this ModelBuilder modelBuilder)
         {
-            
-            modelBuilder.Entity<Category>().HasData(new Category[]
+            var categories = new List<Category>();
+
+            string[] names =
             {
-            new Category { Name = "Ноутбуки", Description = "Портативні комп'ютери" },
-            new Category { Name = "Відеокарти", Description = "GPU для ПК" },
-            new Category { Name = "Процесори", Description = "CPU для комп'ютерів" },
-            new Category { Name = "Монітори", Description = "Екрани та дисплеї" }
-            });
+        "Ноутбуки",
+        "Відеокарти",
+        "Процесори",
+        "Монітори",
+        "Материнські плати",
+        "Оперативна пам'ять",
+        "SSD накопичувачі",
+        "Блоки живлення",
+        "Корпуси",
+        "Периферія"
+    };
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                categories.Add(new Category
+                {
+                    Id = i + 1,
+                    Name = names[i],
+                    Description = $"Категорія {names[i]}"
+                });
+            }
+
+            modelBuilder.Entity<Category>().HasData(categories);
         }
+
 
         public static void SeedBrands(this ModelBuilder modelBuilder)
         {
-            
-            modelBuilder.Entity<Category>().HasData(new Category[]
-            {
-            new Brand { Name = "ASUS", Country = "Taiwan" },
-            new Brand { Name = "MSI", Country = "Taiwan" },
-            new Brand { Name = "Intel", Country = "USA" },
-            new Brand { Name = "AMD", Country = "USA" },
-            new Brand { Name = "Samsung", Country = "South Korea" }
-            });
+            modelBuilder.Entity<Brand>().HasData(
+                new Brand { Id = 1, Name = "ASUS", Country = "Taiwan" },
+                new Brand { Id = 2, Name = "MSI", Country = "Taiwan" },
+                new Brand { Id = 3, Name = "Intel", Country = "USA" },
+                new Brand { Id = 4, Name = "AMD", Country = "USA" },
+                new Brand { Id = 5, Name = "Samsung", Country = "South Korea" }
+            );
         }
-        
-        public static void SeedProduct(this ModelBuilder modelBuilder)
+
+
+        public static void SeedProducts(this ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>().HasData(new Product[]
+            var products = new List<Product>();
+            int productId = 1;
+            var random = new Random();
+
+            for (int categoryId = 1; categoryId <= 10; categoryId++)
             {
-                new Product
-            {
-                Name = "ASUS ROG Strix G15",
-                Price = 45000,
-                Stock = 10,
-                CategoryId = categories.First(c => c.Name == "Ноутбуки").Id,
-                BrandId = brands.First(b => b.Name == "ASUS").Id,
-                Description = "Ігровий ноутбук 16GB RAM, RTX 4060"
-            },
-            new Product
-            {
-                Name = "MSI GeForce RTX 4070",
-                Price = 28000,
-                Stock = 5,
-                CategoryId = categories.First(c => c.Name == "Відеокарти").Id,
-                BrandId = brands.First(b => b.Name == "MSI").Id,
-                Description = "Відеокарта 12GB GDDR6X"
-            },
-            new Product
-            {
-                Name = "Intel Core i7-13700K",
-                Price = 17000,
-                Stock = 7,
-                CategoryId = categories.First(c => c.Name == "Процесори").Id,
-                BrandId = brands.First(b => b.Name == "Intel").Id,
-                Description = "16 ядерний процесор"
+                for (int i = 1; i <= 20; i++)
+                {
+                    products.Add(new Product
+                    {
+                        Id = productId++,
+                        Name = $"Product {categoryId}-{i}",
+                        Price = random.Next(1000, 50000),
+                        Stock = random.Next(1, 50),
+                        CategoryId = categoryId,
+                        BrandId = random.Next(1, 6), 
+                        Description = $"Опис товару {categoryId}-{i}",
+                        CreatedAt = DateTime.Now
+                    });
+                }
             }
 
-            });
-
-
+            modelBuilder.Entity<Product>().HasData(products);
         }
-        
-        
-        
+
+
+
     }
+
+
+
+}
 }
