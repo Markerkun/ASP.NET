@@ -5,9 +5,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    string connectionString = "Server=localhost;Database=MVC_SHOP;Trusted_Connection=True;TrustServerCertificate=True;";
-    options.UseSqlServer(connectionString);
-});
+    var conectionString = builder.Configuration.GetConnectionString("name=LocalDb");
+    options.UseSqlServer(conectionString);
+};);
 
 var app = builder.Build();
 

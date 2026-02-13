@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     {
-        var conectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        var conectionString = builder.Configuration.GetConnectionString("name=LocalDb");
         options.UseSqlServer(conectionString);
     };);
 
